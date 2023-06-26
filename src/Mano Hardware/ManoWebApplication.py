@@ -39,7 +39,7 @@ microassembler = MicroAssembler(assembly_microprogram)
 def microassembler_assemble():
     try:
         microassembler.assemble()
-        return jsonify({'second pass table' : microassembler.get_second_pass_table(), 'first pass table' : microassembler.get_first_pass_table()})
+        return jsonify({'control message' : 'microprogram assembled succesfully', 'second pass table' : microassembler.get_second_pass_table(), 'first pass table' : microassembler.get_first_pass_table()})
     except Exception as e:
         return jsonify({'error' : str(e)})
 
@@ -49,7 +49,7 @@ assembler = Assembler(assembly_program, microassembler.get_first_pass_table())
 def assembler_assemble():
     try:
         assembler.assemble()
-        return jsonify({'second pass table' : assembler.get_second_pass_table(), 'first pass table' : assembler.get_first_pass_table()})
+        return jsonify({'control message' : 'program assembled succesfully', 'second pass table' : assembler.get_second_pass_table(), 'first pass table' : assembler.get_first_pass_table()})
     except Exception as e:
         return jsonify({'error' : str(e)})
 
@@ -82,7 +82,9 @@ def microexecute():
         return jsonify({'control message' : processor.get_microexecute_control_message(),
                         'registers' : processor.get_registers(),
                         'main memory' : processor.get_memory(),
-                        'microprogram memory' : processor.get_microprogram_memory()})
+                        'program' : assembly_program,
+                        'microprogram memory' : processor.get_microprogram_memory(),
+                        'microprogram' : assembly_microprogram})
     except Exception as e:
         return jsonify({'error' : str(e)})
     
@@ -94,7 +96,9 @@ def execute():
         return jsonify({'control message' : processor.get_execute_control_message(),
                         'registers' : processor.get_registers(),
                         'main memory' : processor.get_memory(),
-                        'microprogram memory' : processor.get_microprogram_memory()})
+                        'program' : assembly_program,
+                        'microprogram memory' : processor.get_microprogram_memory(),
+                        'microprogram' : assembly_microprogram})
     except Exception as e:
         return jsonify({'error' : str(e)})
 
@@ -106,7 +110,9 @@ def run():
         return jsonify({'control message' : processor.get_run_control_message(),
                         'registers' : processor.get_registers(),
                         'main memory' : processor.get_memory(),
-                        'microprogram memory' : processor.get_microprogram_memory()})
+                        'program' : assembly_program,
+                        'microprogram memory' : processor.get_microprogram_memory(),
+                        'microprogram' : assembly_microprogram})
     except Exception as e:
         return jsonify({'error' : str(e)})
 
