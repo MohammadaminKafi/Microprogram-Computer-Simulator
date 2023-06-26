@@ -1,0 +1,47 @@
+        ORG 0
+ADD:    NOP                 I   CALL    INDRCT
+        READ                U   JMP     NEXT
+        ADD                 U   JMP     FETCH
+
+        ORG 4
+BRANCH: NOP                 S   JMP     OVER
+        NOP                 U   JMP     FETCH
+OVER:   NOP                 I   CALL    INDRCT
+        ARTPC               U   JMP     FETCH
+
+        ORG 8
+STORE:  NOP                 I   CALL    INDRCT
+        ACTDR               U   JMP     NEXT
+        WRITE               U   JMP     FETCH
+
+        ORG 12
+EXCHNG: NOP                 I   CALL    INDRCT
+        READ                U   JMP     NEXT
+        DRTAC,ACTDR         U   JMP     NEXT
+        WRITE               U   JMP     NEXT
+
+        ORG 16
+LOAD:   NOP                 I   CALL    INDRCT
+        READ                U   JMP     NEXT
+        DRTAC               U   JMP     FETCH
+        
+        ORG 20
+HALT:   HLT                 U   JMP     HALT 
+
+        ORG 24
+OR:     NOP                 I   CALL    INDRCT
+        READ                U   JMP     NEXT
+        OR                  U   JMP     FETCH
+
+        ORG 28
+AND:    NOP                 I   CALL    INDRCT
+        READ                U   JMP     NEXT
+        AND                 U   JMP     FETCH
+
+        ORG 64
+FETCH:  PCTAR               U   JMP     NEXT
+        READ,INCPC          U   JMP     NEXT
+        DRTAR               U   MAP
+INDRCT: READ                U   JMP     NEXT
+        DRTAR               U   RET
+END
