@@ -9,21 +9,17 @@ app = Flask(__name__)
 # set the ip and port of the flask API
 #app.run(host='127.0.0.1', port=5000)
 
+# API for testing
 @app.route("/")
 def hello():
     return "<p>Hello, Mano!</p>"
 
+# API for getting the programs from user and write into the files
 @app.route("/POST_programs", methods=['POST'])
 def POST_programs():
     main_program = request.json['main_program']
     microprogram = request.json['microprogram']
     return f"You entered Program: {main_program} and Microprogram: {microprogram}"
-
-@app.route('/test', methods=['POST'])
-def input_submission():
-    input1 = request.form['input1']
-    #input2 = request.form['input2']
-    return f"You entered Input 1: {input1} and Input 2:"
 
 # extracting code
 assembly_program = open('assembly_program.txt', 'r').read().split('\n')
@@ -36,6 +32,7 @@ for i in range(len(assembly_microprogram)):
  
 # assembling code
 microassembler = MicroAssembler(assembly_microprogram)
+# API for assembling the microprogram code
 @app.route("/microassemble")
 def microassembler_assemble():
     try:
@@ -45,6 +42,7 @@ def microassembler_assemble():
         return jsonify({'error' : str(e)})
 
 assembler = Assembler(assembly_program, microassembler.get_first_pass_table())
+# API for assembling the main program code
 @app.route("/assemble")
 def assembler_assemble():
     try:
@@ -55,6 +53,7 @@ def assembler_assemble():
 
 # initializing processor
 processor = CPU(assembler.start_of_program, microassembler.start_of_microprogram)
+# API for initializing the processor, just a quick show of processor status, not necessary
 @app.route("/initialize")
 def initialize():
     return jsonify({'registers' : processor.get_registers(),
@@ -63,6 +62,7 @@ def initialize():
 
 # loading program to memory 
 programmer = programmer(processor, assembler.get_second_pass_table(), microassembler.get_second_pass_table())
+# API for loading the programs to memories of processor
 @app.route("/load")
 def load():
     try:
@@ -72,6 +72,7 @@ def load():
     except Exception as e:
         return jsonify({'error' : str(e)})
 
+# API for getting the status of processor after a single clock pulse
 @app.route("/microexecute")
 def microexecute():
     try:
@@ -82,6 +83,7 @@ def microexecute():
     except Exception as e:
         return jsonify({'error' : str(e)})
     
+# API for getting the status of processor after execution of a single instruction
 @app.route("/execute")
 def execute():
     try:
@@ -92,6 +94,7 @@ def execute():
     except Exception as e:
         return jsonify({'error' : str(e)})
 
+# API for running the whole program
 @app.route("/run")
 def run():
     try:
