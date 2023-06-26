@@ -1,0 +1,7 @@
+ORG 100
+MAIN,   FACT    NUM
+        STRAC   SUM
+        HALT
+SUM,    DEC 0
+NUM,    DEC 8
+END

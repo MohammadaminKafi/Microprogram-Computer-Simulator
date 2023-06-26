@@ -49,7 +49,8 @@ class CPU:
             111: PCTDR (DR <- PC)
         F3:
             000: None
-            001: XOR (AC xor DR)
+            --001: XOR (AC xor DR)
+            001: MUL (AC <- AC * DR)
             010: COM (AC <- not AC)
             011: SHL (AC <- AC << 1)
             100: SHR (AC <- AC >> 1)
@@ -76,13 +77,18 @@ class CPU:
         self.AC = register('AC', '0b' + '0' * 16, 16)
         self.CAR = register('CAR', start_of_microprogram, 7)
         self.SBR = register('SBR', '0b' + '0' * 7, 7)
+        # initializing copy of registers for simultinous change
+        self.PC_copy = self.PC.read()
+        self.AR_copy = self.AR.read()
+        self.DR_copy = self.DR.read()
+        self.AC_copy = self.AC.read()
         # initializing memory
         self.main_memory = memory('main_memory', 16, 2048)
         self.microprogram_memory = memory('microprogram_memory', 20, 128)
         # initializing fields
         self.F1 = {'000': 'NOP', '001': 'ADD', '010': 'CLRAC', '011': 'INCAC', '100': 'DRTAC', '101': 'DRTAR', '110': 'PCTAR', '111': 'WRITE'}
         self.F2 = {'000': 'NOP', '001': 'SUB', '010': 'OR', '011': 'AND', '100': 'READ', '101': 'ACTDR', '110': 'INCDR', '111': 'PCTDR'}
-        self.F3 = {'000': 'NOP', '001': 'XOR', '010': 'COM', '011': 'SHL', '100': 'SHR', '101': 'INCPC', '110': 'ARTPC', '111': 'HLT'}
+        self.F3 = {'000': 'NOP', '001': 'MUL', '010': 'COM', '011': 'SHL', '100': 'SHR', '101': 'INCPC', '110': 'ARTPC', '111': 'HLT'}
         self.CD = {'00': 'U', '01': 'I', '10': 'S', '11': 'Z'}
         self.BR = {'00': 'JMP', '01': 'CALL', '10': 'RET', '11': 'MAP'}
         # initializing fields inside
@@ -93,6 +99,8 @@ class CPU:
         self.br = '00'
         self.ad = '0000000'
         self.condition = False
+        # initializing carry bit
+        self.carry = '0'
         # initializing flag for fetch state and halt state
         self.fetch_flag = False
         self.halt_flag = False
@@ -158,7 +166,8 @@ class CPU:
         if self.f3 == '000':
             self.instruction_NOP()
         elif self.f3 == '001':
-            self.instruction_XOR()
+            #self.instruction_XOR()
+            self.instruction_MUL()
         elif self.f3 == '010':
             self.instruction_COM()
         elif self.f3 == '011':
@@ -200,6 +209,12 @@ class CPU:
         self.main_memory.reset_readable()
         # control messages and flags
         self.counter += 1
+        # settint registers' copies
+        self.PC_copy = self.PC.read()
+        self.AR_copy = self.AR.read()
+        self.DR_copy = self.DR.read()
+        self.AC_copy = self.AC.read()
+        # setting FETCH flag
         if self.CAR.read() == '0b' + bin(64)[2:].zfill(7):
             self.fetch_flag = True
         else:
@@ -227,7 +242,7 @@ class CPU:
     # _____________ F1 _____________
     # function for executing ADD
     def instruction_ADD(self):
-        result = int(self.AC.read()[2:], 2) + int(self.DR.read()[2:], 2)
+        result = int(self.AC_copy[2:], 2) + int(self.DR_copy[2:], 2)
         result = '0b' + bin(result)[2:].zfill(16)
         self.AC.write(result)
         self.AC.written()
@@ -239,116 +254,133 @@ class CPU:
 
     # function for executing INCAC
     def instruction_INCAC(self):
-        result = int(self.AC.read()[2:], 2) + 1
+        result = int(self.AC_copy[2:], 2) + 1
         result = '0b' + bin(result)[2:].zfill(16)
         self.AC.write(result)
         self.AC.written()
 
     # function for executing DRTAC
     def instruction_DRTAC(self):
-        self.AC.write(self.DR.read())
+        self.AC.write(self.DR_copy)
         self.AC.written()
 
     # function for executing DRTAR
     def instruction_DRTAR(self):
-        self.AR.write(self.DR.read())
+        self.AR.write(self.DR_copy)
         self.AR.written()
 
     # function for executing PCTAR
     def instruction_PCTAR(self):
-        self.AR.write(self.PC.read())
+        self.AR.write(self.PC_copy)
         self.AR.written()
 
     # function for executing WRITE
     def instruction_WRITE(self):
-        self.main_memory.write(self.DR.read(), self.AR.read())
+        self.main_memory.write(self.DR_copy, self.AR_copy)
         self.main_memory.written()
 
     # _____________ F2 _____________
     # function for executing SUB
     def instruction_SUB(self):
-        result = int(self.AC.read()[2:], 2) - int(self.DR.read()[2:], 2)
+        result = int(self.AC_copy[2:], 2) - int(self.DR_copy[2:], 2)
         result = '0b' + bin(result)[2:].zfill(16)
         self.AC.write(result)
         self.AC.written()
     
     # function for executing OR
     def instruction_OR(self):
-        result = int(self.AC.read()[2:], 2) | int(self.DR.read()[2:], 2)
+        result = int(self.AC_copy[2:], 2) | int(self.DR_copy[2:], 2)
         result = '0b' + bin(result)[2:].zfill(16)
         self.AC.write(result)
         self.AC.written()
 
     # function for executing AND
     def instruction_AND(self):
-        result = int(self.AC.read()[2:], 2) & int(self.DR.read()[2:], 2)
+        result = int(self.AC_copy[2:], 2) & int(self.DR_copy[2:], 2)
         result = '0b' + bin(result)[2:].zfill(16)
         self.AC.write(result)
         self.AC.written()
 
     # function for executing READ
     def instruction_READ(self):
-        print(f'value of given memory address is {self.main_memory.read(self.AR.read())}')
-        self.DR.write(self.main_memory.read(self.AR.read()))
+        print(f'value of given memory address is {self.main_memory.read(self.AR_copy)}')
+        self.DR.write(self.main_memory.read(self.AR_copy))
         self.main_memory.read_flag()
         self.DR.written()
 
     # function for executing ACTDR
     def instruction_ACTDR(self):
-        self.DR.write(self.AC.read())
+        self.DR.write(self.AC_copy)
         self.DR.written()
 
     # function for executing INCDR
     def instruction_INCDR(self):
-        result = int(self.DR.read()[2:], 2) + 1
+        result = int(self.DR_copy[2:], 2) + 1
         result = '0b' + bin(result)[2:].zfill(16)
         self.DR.write(result)
         self.DR.written()
 
     # function for executing PCTDR
     def instruction_PCTDR(self):
-        self.DR.write(self.PC.read())
+        self.DR.write(self.PC_copy)
         self.DR.written()
 
     # _____________ F3 _____________    
     # function for executing XOR
-    def instruction_XOR(self):
-        result = int(self.AC.read()[2:], 2) ^ int(self.DR.read()[2:], 2)
+    # def instruction_XOR(self):
+    #     result = int(self.AC_copy[2:], 2) ^ int(self.DR_copy[2:], 2)
+    #     result = '0b' + bin(result)[2:].zfill(16)
+    #     self.AC.write(result)
+    #     self.AC.written()
+
+    # function for executing MUL
+    def instruction_MUL(self):
+        result = int(self.AC_copy[2:], 2) * int(self.DR_copy[2:], 2)
         result = '0b' + bin(result)[2:].zfill(16)
         self.AC.write(result)
         self.AC.written()
 
     # function for executing COM
     def instruction_COM(self):
-        result = ~int(self.AC.read()[2:], 2)
-        result = '0b' + bin(result)[2:].zfill(16)
+        result = self.AC_copy[2:]
+        for bit in range(len(result)):
+            if result[bit] == '0':
+                result = result[:bit] + '1' + result[bit+1:]
+            else:
+                result = result[:bit] + '0' + result[bit+1:]
+        print(f'complement of AC is {result}')
+        result = '0b' + str(result).zfill(16)
         self.AC.write(result)
         self.AC.written()
 
     # function for executing SHL
     def instruction_SHL(self):
-        result = int(self.AC.read()[2:], 2) << 1
-        result = '0b' + bin(result)[2:].zfill(16)
+        temp_carry = self.carry
+        result = self.AC_copy[2:]
+        self.carry = result[0]
+        result = '0b' + result[1:] + temp_carry
         self.AC.write(result)
         self.AC.written()
 
     # function for executing SHR
     def instruction_SHR(self):
-        result = int(self.AC.read()[2:], 2) >> 1
-        result = '0b' + bin(result)[2:].zfill(16)
+        temp_carry = self.carry
+        result = self.AC_copy[2:]
+        self.carry = result[-1]
+        result = '0b' + temp_carry + result[:-1]
         self.AC.write(result)
         self.AC.written()
 
     # function for executing INCPC
     def instruction_INCPC(self):
-        result = int(self.PC.read()[2:], 2) + 1
+        result = int(self.PC_copy[2:], 2) + 1
         result = '0b' + bin(result)[2:].zfill(11)
         self.PC.write(result)
         self.PC.written()
 
     # function for executing ARTPC
     def instruction_ARTPC(self):
-        self.PC.write(self.AR.read())
+        self.PC.write(self.AR_copy)
         self.PC.written()
 
     # function for executing HLT
@@ -362,21 +394,21 @@ class CPU:
 
     # function for executing I
     def condition_I(self):
-        if self.DR.read()[2] == '1':
+        if self.DR_copy[2] == '1':
             self.condition = True
         else:
             self.condition = False
 
     # function for executing S
     def condition_S(self):
-        if self.AC.read()[2] == '1':
+        if self.AC_copy[2] == '1':
             self.condition = True
         else:
             self.condition = False
 
     # function for executing Z
     def condition_Z(self):
-        if self.AC.read() == '0b' + '0' * 16:
+        if self.AC_copy == '0b' + '0' * 16:
             self.condition = True
         else:
             self.condition = False
@@ -389,7 +421,7 @@ class CPU:
             self.CAR.written()
         else:
             result = int(self.CAR.read()[2:], 2) + 1
-            result = '0b' + bin(result)[2:0].zfill(16)
+            result = '0b' + bin(result)[2:].zfill(7)
             self.CAR.write(result)
             self.CAR.written()
 

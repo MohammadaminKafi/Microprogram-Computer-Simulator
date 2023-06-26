@@ -25,7 +25,7 @@ LOAD:   NOP                 I   CALL    INDRCT
         READ                U   JMP     NEXT
         DRTAC               U   JMP     FETCH
         
-        ORG 20
+        ORG 60
 HALT:   HLT                 U   JMP     HALT 
 
         ORG 24

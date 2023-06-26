@@ -166,7 +166,7 @@ class MicroAssembler:
         self.second_pass_table = {}
         self.F1 = {'NOP': '000', 'ADD': '001', 'CLRAC': '010', 'INCAC': '011', 'DRTAC': '100', 'DRTAR': '101', 'PCTAR': '110', 'WRITE': '111'}
         self.F2 = {'NOP': '000', 'SUB': '001', 'OR': '010', 'AND': '011', 'READ': '100', 'ACTDR': '101', 'INCDR': '110', 'PCTDR': '111'}
-        self.F3 = {'NOP': '000', 'XOR': '001', 'COM': '010', 'SHL': '011', 'SHR': '100', 'INCPC': '101', 'ARTPC': '110', 'HLT': '111'}
+        self.F3 = {'NOP': '000', 'MUL': '001', 'COM': '010', 'SHL': '011', 'SHR': '100', 'INCPC': '101', 'ARTPC': '110', 'HLT': '111'}
         self.CD = {'U': '00', 'I': '01', 'S': '10', 'Z': '11'}
         self.BR = {'JMP': '00', 'CALL': '01', 'RET': '10', 'MAP': '11'}
         self.start_of_microprogram = '0b' + bin(0)[2:].zfill(7)

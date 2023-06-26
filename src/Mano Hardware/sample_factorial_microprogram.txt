@@ -1,0 +1,34 @@
+        ORG 0
+FACT:   CLRAC               I   CALL    INDRCT
+        READ                U   JMP     CNTNU   
+
+        ORG 4
+STRAC:  NOP                 I   CALL    INDRCT
+        DRTAC,ACTDR         U   JMP     NEXT
+        WRITE               U   JMP     NEXT
+        DRTAC,ACTDR         U   JMP     FETCH
+
+        ORG 60
+HALT:   HLT                 U   JMP     HALT
+
+        ORG 64
+FETCH:  PCTAR               U   JMP     NEXT
+        READ,INCPC          U   JMP     NEXT
+        DRTAR               U   MAP
+INDRCT: READ                U   JMP     NEXT
+        DRTAR               U   RET
+
+        ORG 70
+CNTNU:  DRTAC,ACTDR         S   JMP     FETCH
+        NOP                 Z   JMP     FETCH   
+        DRTAC,ACTDR         U   JMP     NEXT
+        INCAC               U   JMP     NEXT
+LOOP:   MUL                 U   JMP     NEXT
+        DRTAC,ACTDR         U   JMP     NEXT
+        COM                 U   JMP     NEXT
+        INCAC               U   JMP     NEXT
+        INCAC               U   JMP     NEXT
+        COM                 U   JMP     NEXT
+        INCAC               Z   JMP     FETCH
+        DRTAC,ACTDR         U   JMP     LOOP
+END
