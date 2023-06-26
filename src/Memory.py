@@ -12,19 +12,19 @@ class memory:
         self.width = word_width
         # checking if the height is a power of 2
         if log2(height) != int(log2(height)):
-            raise ValueError('The height of the memory must be a power of 2: ' + height)
+            raise ValueError(f'The height of {self.name} must be a power of 2: ' + height)
         self.height = height
         self.number_of_address_bits = log2(height)
         self.dual_port = dual_port
         # initializing the memory with all zeros
-        self.depository = [register('reg' + str(i), '0b' + '0' * self.width, self.width) for i in range(self.height)]
+        self.depository = [register('cell' + str(i), '0b' + '0' * self.width, self.width) for i in range(self.height)]
         self.writable = True 
         self.readable = True
 
     # (if the memory is not dual ported) function to write a value in the word of the momory to the given address in binary
     def write(self, value : str, address : str) -> None:
         if not self.writable:
-            raise ValueError('The memory port is already in use in this clock pulse')
+            raise ValueError(f'The {self.name} port is already in use in this clock pulse')
         # value will be checked in the register write function
         # checking if the address is in binary format
         if not self.check_binary(address):
@@ -40,7 +40,7 @@ class memory:
     # (if the memory is not dual ported) function to read a value from the word of the memory from the given address in binary
     def read(self, address : str) -> str:
         if not self.readable:
-            raise ValueError('The memory port is already in use in this clock pulse')
+            raise ValueError(f'The {self.name} port is already in use in this clock pulse')
         # checking if the address is in binary format
         if not self.check_binary(address):
             raise ValueError('The address must be in binary format: ' + address)
