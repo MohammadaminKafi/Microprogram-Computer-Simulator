@@ -3,8 +3,10 @@ from ManoMicroprogramCPU import CPU
 from ManoProgrammer import programmer
 
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # set the ip and port of the flask API
 #app.run(host='127.0.0.1', port=5000)
@@ -37,7 +39,7 @@ microassembler = MicroAssembler(assembly_microprogram)
 def microassembler_assemble():
     try:
         microassembler.assemble()
-        return jsonify({'second pass' : microassembler.get_second_pass_table(), 'first pass' : microassembler.get_first_pass_table()})
+        return jsonify({'second pass table' : microassembler.get_second_pass_table(), 'first pass table' : microassembler.get_first_pass_table()})
     except Exception as e:
         return jsonify({'error' : str(e)})
 
@@ -47,7 +49,7 @@ assembler = Assembler(assembly_program, microassembler.get_first_pass_table())
 def assembler_assemble():
     try:
         assembler.assemble()
-        return jsonify({'second pass' : assembler.get_second_pass_table(), 'first pass' : assembler.get_first_pass_table()})
+        return jsonify({'second pass table' : assembler.get_second_pass_table(), 'first pass table' : assembler.get_first_pass_table()})
     except Exception as e:
         return jsonify({'error' : str(e)})
 
@@ -68,7 +70,7 @@ def load():
     try:
         programmer.load_program()
         programmer.load_microprogram()
-        return jsonify({'main' : processor.main_memory.get_memory(), 'microprogram' : processor.microprogram_memory.get_memory()})
+        return jsonify({'main memory' : processor.main_memory.get_memory(), 'microprogram memory' : processor.microprogram_memory.get_memory()})
     except Exception as e:
         return jsonify({'error' : str(e)})
 
@@ -77,7 +79,8 @@ def load():
 def microexecute():
     try:
         processor.microexecute()
-        return jsonify({'registers' : processor.get_registers(),
+        return jsonify({'control message' : processor.get_microexecute_control_message(),
+                        'registers' : processor.get_registers(),
                         'main memory' : processor.get_memory(),
                         'microprogram memory' : processor.get_microprogram_memory()})
     except Exception as e:
@@ -88,7 +91,8 @@ def microexecute():
 def execute():
     try:
         processor.execute()
-        return jsonify({'registers' : processor.get_registers(),
+        return jsonify({'control message' : processor.get_execute_control_message(),
+                        'registers' : processor.get_registers(),
                         'main memory' : processor.get_memory(),
                         'microprogram memory' : processor.get_microprogram_memory()})
     except Exception as e:
@@ -99,7 +103,8 @@ def execute():
 def run():
     try:
         processor.run()
-        return jsonify({'registers' : processor.get_registers(),
+        return jsonify({'control message' : processor.get_run_control_message(),
+                        'registers' : processor.get_registers(),
                         'main memory' : processor.get_memory(),
                         'microprogram memory' : processor.get_microprogram_memory()})
     except Exception as e:

@@ -209,6 +209,8 @@ class CPU:
         self.main_memory.reset_readable()
         # control messages and flags
         self.counter += 1
+        if self.counter == 2000:
+            raise Exception('Program is in an infinite loop')
         # settint registers' copies
         self.PC_copy = self.PC.read()
         self.AR_copy = self.AR.read()
@@ -493,3 +495,12 @@ class CPU:
         return {
             str(i).zfill(3) : [self.microprogram_memory.depository[i].read(), int(self.microprogram_memory.depository[i].read() ,2)] for i in range(self.microprogram_memory.height)
         }
+
+    def get_microexecute_control_message(self) -> str:
+        return f'{self.counter}---Microinstruction of line {int(self.CAR.read()[2:], 2)} on execute' + '\n' + f'f1: {self.F1[self.f1]}, f2: {self.F2[self.f2]}, f3: {self.F3[self.f3]}, cd: {self.CD[self.cd]}, br: {self.BR[self.br]}, address: {self.ad}'
+
+    def get_execute_control_message(self) -> str:
+        return
+
+    def get_run_control_message(self) -> str:
+        return
