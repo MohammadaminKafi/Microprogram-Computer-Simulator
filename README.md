@@ -1,4 +1,4 @@
-# Microprogram-Computer-Simulator
+# Microprogram Computer Simulator
 
 Simulator for Mano Microprogram Computer and some customized versions
 
@@ -36,7 +36,7 @@ F3:
 | Instruction | Code |
 | --- | ----------- |
 | NOP | 000 |
-| XOR | 001 |
+| XOR | 001[^1] |
 | MUL | 001 |
 | COM | 010 |
 | SHL | 011 |
@@ -60,3 +60,6 @@ BR:
 | CALL | 01 |
 | RET | 10 |
 | MAP | 11 |
+
+[^1]: In this version 'MUL' is used instead of 'XOR'. To use 'XOR' version, uncomment lines related to 'XOR' and add 'XOR' to dictionaries instead of 'MUL' in 
+`src/Mano Hardware/ManoAssembler.py` and `src/Mano Hardware/ManoMicroprogramCPU.py`
