@@ -4,7 +4,7 @@ Simulator for Mano Microprogram Computer and some customized versions
 
 Please install dependancies using `pip install flask` and `pip install -U flask-cors`
 
-In Mano Hardware directory, write microprogram code in `assembly_microprogram.txt` and program code in `assembly_program.txt` and run the program using `python main.py`
+In Mano Hardware directory, write microprogram code in `assembly_microprogram.txt` and program code in `assembly_program.txt` and run the program using `python main.py` or `flask --app ManoWebApplication.py run` for web application version
 
 The following instructions are applicable (in this format: F1,F2,F3,CD,BR,ADDR):
 
