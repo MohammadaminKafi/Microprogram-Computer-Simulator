@@ -15,6 +15,29 @@ CORS(app)
 # set the ip and port of the flask API
 #app.run(host='127.0.0.1', port=5000)
 
+# needed functions
+# function to clear a file
+def clear_file(filename):
+    try:
+        open(filename, 'w').close()
+        return True
+    except Exception as e:
+        print(f'Error clearing file: {e}')
+        return False
+# fucntion to stringify the file
+def stringify_file(filename):
+    try:
+        with open(filename, 'r') as f:
+            text = f.read().split('\n')
+        clear_file(filename)
+        with open(filename, 'w') as f:
+            for line in text:
+                f.write(line + '\n')
+        return True
+    except Exception as e:
+        print(f'Error stringifying file: {e}')
+        return False
+
 # API for testing
 @app.route("/")
 def hello():
@@ -38,6 +61,9 @@ def POST_programs():
             json.dump(main_program, f)
         with open('microprogram_code.txt', 'w') as f:
             json.dump(microprogram, f)
+        # stringify the files
+        stringify_file('main_code.txt')
+        stringify_file('microprogram_code.txt')
         app.logger.info('Programs written successfully')
         return jsonify({'message': 'Programs written successfully'})
     except Exception as e:
