@@ -17,23 +17,21 @@ def hello():
     return "<p>Hello, Mano!</p>"
 
 # API for getting the programs from user and write into the files
+import json
+
 @app.route("/POST_programs", methods=['GET', 'POST'])
 def POST_programs():
-    test = request
     main_program = request.json['main_program']
     microprogram = request.json['microprogram']
-    # write test in a test file
-    with open('test.txt', 'w') as f:
-        f.write(test)
     # write the programs into the files
     try:
         with open('main_code.txt', 'w') as f:
-            f.write(main)
-        with open('main_microprogram_code.txt', 'w') as f:
-            f.write(microprogram)
-        return f"You entered Program: {main_program} and Microprogram: {microprogram}"
+            json.dump(main_program, f)
+        with open('microprogram_code.txt', 'w') as f:
+            json.dump(microprogram, f)
     except Exception as e:
-        return jsonify({'error' : str(e)})
+        return jsonify({'error': str(e)})
+    return jsonify({'message': 'Programs written successfully'})
 
 # extracting code
 assembly_program = open('main_code.txt', 'r').read().split('\n')
