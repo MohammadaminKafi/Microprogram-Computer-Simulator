@@ -5,6 +5,8 @@ from ManoProgrammer import programmer
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+import json
+
 app = Flask(__name__)
 CORS(app)
 
@@ -17,10 +19,11 @@ def hello():
     return "<p>Hello, Mano!</p>"
 
 # API for getting the programs from user and write into the files
-import json
-
 @app.route("/POST_programs", methods=['GET', 'POST'])
 def POST_programs():
+    app.logger.info('Received POST request')
+    app.logger.debug(f'Request data: {request.data}')
+    app.logger.debug(f'Request JSON: {request.json}')
     main_program = request.json['main_program']
     microprogram = request.json['microprogram']
     # write the programs into the files
@@ -30,7 +33,9 @@ def POST_programs():
         with open('microprogram_code.txt', 'w') as f:
             json.dump(microprogram, f)
     except Exception as e:
+        app.logger.error(f'Error writing programs: {e}')
         return jsonify({'error': str(e)})
+    app.logger.info('Programs written successfully')
     return jsonify({'message': 'Programs written successfully'})
 
 # extracting code
