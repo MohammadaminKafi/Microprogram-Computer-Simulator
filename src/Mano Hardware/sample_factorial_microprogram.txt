@@ -1,7 +1,14 @@
+# use this format to comment, comments at the end of the line is not allowed
+# start of control would be from FETCH, else from location 64 of microprogram memory
+
+# use this format for writting code:
+# LABEL: F1,F2,F3       CD      BR      ADDRESS
+# NEXT will be replaced by next address of memory 
+
         ORG 0
 FACT:   CLRAC               I   CALL    INDRCT
         READ                U   JMP     CNTNU   
-# this line is comment
+
         ORG 4
 STRAC:  NOP                 I   CALL    INDRCT
         DRTAC,ACTDR         U   JMP     NEXT

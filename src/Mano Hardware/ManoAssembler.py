@@ -24,6 +24,9 @@ class Assembler:
                 continue
             # if line is label
             if line[0][-1] == ',':
+                # check if label is already in first pass table
+                if line[0][:-1] in self.first_pass_table:
+                    raise Exception(f'Label of line {str(l)} is already defined in memory location {self.first_pass_table[line[0][:-1]]}: {line[0][:-1]}')
                 # add label to first pass table together with the line number
                 self.first_pass_table[line[0][:-1]] = lc
                 lc += 1
@@ -178,11 +181,14 @@ class MicroAssembler:
         l = 1
         # iterating over assembly code
         for line in self.assembly_code:
-            if line == []  or line[0][0] == '#':
+            if line == [] or line[0][0] == '#':
                 l += 1
                 continue
             # if line is label
             if line[0][-1] == ':':
+                # check if label is already in first pass table
+                if line[0][:-1] in self.first_pass_table:
+                    raise Exception(f'Label of line {str(l)} is already defined in memory location {self.first_pass_table[line[0][:-1]]}: {line[0][:-1]}')
                 # add label to first pass table together with the value of line counter
                 self.first_pass_table[line[0][:-1]] = lc
                 lc += 1
