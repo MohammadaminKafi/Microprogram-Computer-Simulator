@@ -19,7 +19,7 @@ class Assembler:
         l = 1
         # iterating over assembly code
         for line in self.assembly_code:
-            if line == []:
+            if line == [] or line[0][0] == '#':
                 l += 1
                 continue
             # if line is label
@@ -52,7 +52,7 @@ class Assembler:
         l = 1
         # iterating over assembly code
         for line in self.assembly_code:
-            if line == []:
+            if line == [] or line[0][0] == '#':
                 l += 1
                 continue
             # if line is psuedo instruction (ORG, END, DEC, HEX, BIN)
@@ -178,7 +178,7 @@ class MicroAssembler:
         l = 1
         # iterating over assembly code
         for line in self.assembly_code:
-            if line == []:
+            if line == []  or line[0][0] == '#':
                 l += 1
                 continue
             # if line is label
@@ -214,7 +214,7 @@ class MicroAssembler:
         lc = 0
         # iterating over assembly code
         for line in self.assembly_code:
-            if line == []:
+            if line == [] or line[0][0] == '#':
                 l += 1
                 continue
             # if line is psuedo instruction (ORG, END, DEC, HEX, BIN)

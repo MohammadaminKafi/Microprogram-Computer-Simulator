@@ -1,7 +1,7 @@
         ORG 0
 FACT:   CLRAC               I   CALL    INDRCT
         READ                U   JMP     CNTNU   
-
+# this line is comment
         ORG 4
 STRAC:  NOP                 I   CALL    INDRCT
         DRTAC,ACTDR         U   JMP     NEXT

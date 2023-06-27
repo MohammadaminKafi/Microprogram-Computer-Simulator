@@ -1,4 +1,5 @@
 ORG 100
+# this line is comment
 MAIN,   FACT    NUM
         STRAC   SUM
         HALT
