@@ -291,15 +291,25 @@ class CPU:
     
     # function for executing OR
     def instruction_OR(self):
-        result = int(self.AC_copy[2:], 2) | int(self.DR_copy[2:], 2)
-        result = '0b' + bin(result)[2:].zfill(16)
+        result = ''
+        for index in range(len(self.AC_copy[2:])):
+            if self.AC_copy[2:][index] == '1' or self.DR_copy[2:][index] == '1':
+                result = result + '1'
+            else:
+                result = result + '0'
+        result = '0b' + result
         self.AC.write(result)
         self.AC.written()
 
     # function for executing AND
     def instruction_AND(self):
-        result = int(self.AC_copy[2:], 2) & int(self.DR_copy[2:], 2)
-        result = '0b' + bin(result)[2:].zfill(16)
+        result = ''
+        for index in range(len(self.AC_copy[2:])):
+            if self.AC_copy[2:][index] == '1' and self.DR_copy[2:][index] == '1':
+                result = result + '1'
+            else:
+                result = result + '0'
+        result = '0b' + result
         self.AC.write(result)
         self.AC.written()
 
@@ -329,11 +339,16 @@ class CPU:
 
     # _____________ F3 _____________    
     # function for executing XOR
-    # def instruction_XOR(self):
-    #     result = int(self.AC_copy[2:], 2) ^ int(self.DR_copy[2:], 2)
-    #     result = '0b' + bin(result)[2:].zfill(16)
-    #     self.AC.write(result)
-    #     self.AC.written()
+    def instruction_XOR(self):
+        result = ''
+        for index in range(len(self.AC_copy[2:])):
+            if self.AC_copy[2:][index] == self.DR_copy[2:][index]:
+                result = result + '0'
+            else:
+                result = result + '1'
+        result = '0b' + result
+        self.AC.write(result)
+        self.AC.written()
 
     # function for executing MUL
     def instruction_MUL(self):
