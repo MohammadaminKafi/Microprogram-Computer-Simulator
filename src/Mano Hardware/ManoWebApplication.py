@@ -28,7 +28,7 @@ def clear_file(filename):
 def stringify_file(filename):
     try:
         with open(filename, 'r') as f:
-            text = f.read().split('\n')
+            text = json.load(f)
         clear_file(filename)
         with open(filename, 'w') as f:
             for line in text:
