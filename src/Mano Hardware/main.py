@@ -52,4 +52,4 @@ programmer.load_microprogram()
 # for i in range(1):
 #     processor.execute()
 
-#processor.run()
+processor.run()

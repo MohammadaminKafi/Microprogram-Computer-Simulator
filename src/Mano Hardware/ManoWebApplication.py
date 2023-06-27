@@ -63,7 +63,7 @@ def microassembler_assemble():
     try:
         microassembler.assemble()
         app.logger.info('Microprogram assembled successfully')
-        return jsonify({'control message' : 'microprogram assembled succesfully', 'second pass table' : jsonify(microassembler.get_second_pass_table()), 'first pass table' : jsonify(microassembler.get_first_pass_table())})
+        return jsonify({'control message' : 'microprogram assembled succesfully', 'second pass table' : microassembler.get_second_pass_table(), 'first pass table' : microassembler.get_first_pass_table()})
     except Exception as e:
         app.logger.error(f'Error assembling microprogram: {e}')
         return jsonify({'error' : str(e)})
@@ -76,7 +76,7 @@ def assembler_assemble():
     try:
         assembler.assemble()
         app.logger.info('Program assembled successfully')
-        return jsonify({'control message' : 'program assembled succesfully', 'second pass table' : jsonify(assembler.get_second_pass_table()), 'first pass table' : jsonify(assembler.get_first_pass_table())})
+        return jsonify({'control message' : 'program assembled succesfully', 'second pass table' : assembler.get_second_pass_table(), 'first pass table' : assembler.get_first_pass_table()})
     except Exception as e:
         app.logger.error(f'Error assembling program: {e}')
         return jsonify({'error' : str(e)})
@@ -101,7 +101,12 @@ def load():
         programmer.load_program()
         programmer.load_microprogram()
         app.logger.info('Programs loaded successfully')
-        return jsonify({'main memory' : processor.main_memory.get_memory(), 'microprogram memory' : processor.microprogram_memory.get_memory()})
+        return jsonify({'control message' : 'programs loaded succesfully',
+                        'registers' : processor.get_registers(),
+                        'main memory' : processor.get_memory(),
+                        'program' : assembly_program,
+                        'microprogram memory' : processor.get_microprogram_memory(),
+                        'microprogram' : assembly_microprogram})
     except Exception as e:
         app.logger.error(f'Error loading programs: {e}')
         return jsonify({'error' : str(e)})
