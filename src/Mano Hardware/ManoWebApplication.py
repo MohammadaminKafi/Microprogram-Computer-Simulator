@@ -6,8 +6,10 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 import json
+import logging
 
 app = Flask(__name__)
+app.logger.setLevel(logging.INFO)
 CORS(app)
 
 # set the ip and port of the flask API
@@ -16,6 +18,7 @@ CORS(app)
 # API for testing
 @app.route("/")
 def hello():
+    app.logger.info('Received GET request')
     return "<p>Hello, Mano!</p>"
 
 # API for getting the programs from user and write into the files
@@ -52,6 +55,7 @@ microassembler = MicroAssembler(assembly_microprogram)
 # API for assembling the microprogram code
 @app.route("/microassemble")
 def microassembler_assemble():
+    app.logger.info('Received GET request')
     try:
         microassembler.assemble()
         return jsonify({'control message' : 'microprogram assembled succesfully', 'second pass table' : microassembler.get_second_pass_table(), 'first pass table' : microassembler.get_first_pass_table()})
