@@ -19,8 +19,12 @@ def hello():
 # API for getting the programs from user and write into the files
 @app.route("/POST_programs", methods=['GET', 'POST'])
 def POST_programs():
+    test = request
     main_program = request.json['main_program']
     microprogram = request.json['microprogram']
+    # write test in a test file
+    with open('test.txt', 'w') as f:
+        f.write(test)
     # write the programs into the files
     try:
         with open('main_code.txt', 'w') as f:
