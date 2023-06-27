@@ -31,8 +31,7 @@ def stringify_file(filename):
             text = json.load(f)
         clear_file(filename)
         with open(filename, 'w') as f:
-            for line in text:
-                f.write(line + '\n')
+             f.write(str(text))
         return True
     except Exception as e:
         print(f'Error stringifying file: {e}')
