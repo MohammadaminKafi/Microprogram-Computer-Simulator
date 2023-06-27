@@ -63,7 +63,7 @@ def microassembler_assemble():
     try:
         microassembler.assemble()
         app.logger.info('Microprogram assembled successfully')
-        return jsonify({'control_message' : 'microprogram assembled succesfully', 'second_pass_table' : [microassembler.get_second_pass_table()], 'first_pass_table' : [microassembler.get_first_pass_table()]})
+        return jsonify({'control_message' : 'microprogram assembled succesfully', 'second_pass_table' : microassembler.get_second_pass_table(), 'first_pass_table' : microassembler.get_first_pass_table()})
     except Exception as e:
         app.logger.error(f'Error assembling microprogram: {e}')
         return jsonify({'error' : str(e)})
@@ -76,7 +76,7 @@ def assembler_assemble():
     try:
         assembler.assemble()
         app.logger.info('Program assembled successfully')
-        return jsonify({'control_message' : 'program assembled succesfully', 'second_pass_table' : [assembler.get_second_pass_table()], 'first_pass_table' : [assembler.get_first_pass_table()]})
+        return jsonify({'control_message' : 'program assembled succesfully', 'second_pass_table' : assembler.get_second_pass_table(), 'first_pass_table' : assembler.get_first_pass_table()})
     except Exception as e:
         app.logger.error(f'Error assembling program: {e}')
         return jsonify({'error' : str(e)})
@@ -88,8 +88,8 @@ processor = CPU(assembler.start_of_program, microassembler.start_of_microprogram
 def initialize():
     app.logger.info('Received GET request for initialize')
     return jsonify({'registers' : processor.get_registers(),
-                    'main memory' : processor.get_memory(),
-                    'microprogram memory' : processor.get_microprogram_memory()})
+                    'main_memory' : processor.get_memory(),
+                    'microprogram_memory' : processor.get_microprogram_memory()})
 
 # loading program to memory 
 programmer = programmer(processor, assembler.get_second_pass_table(), microassembler.get_second_pass_table())
@@ -101,11 +101,11 @@ def load():
         programmer.load_program()
         programmer.load_microprogram()
         app.logger.info('Programs loaded successfully')
-        return jsonify({'control message' : 'programs loaded succesfully',
+        return jsonify({'control_message' : 'programs loaded succesfully',
                         'registers' : processor.get_registers(),
-                        'main memory' : processor.get_memory(),
+                        'main_memory' : processor.get_memory(),
                         'program' : assembly_program,
-                        'microprogram memory' : processor.get_microprogram_memory(),
+                        'microprogram_memory' : processor.get_microprogram_memory(),
                         'microprogram' : assembly_microprogram})
     except Exception as e:
         app.logger.error(f'Error loading programs: {e}')
@@ -118,11 +118,11 @@ def microexecute():
     try:
         processor.microexecute()
         app.logger.info('Microexecuted successfully')
-        return jsonify({'control message' : processor.get_microexecute_control_message(),
+        return jsonify({'control_message' : processor.get_microexecute_control_message(),
                         'registers' : processor.get_registers(),
-                        'main memory' : processor.get_memory(),
+                        'main_memory' : processor.get_memory(),
                         'program' : assembly_program,
-                        'microprogram memory' : processor.get_microprogram_memory(),
+                        'microprogram_memory' : processor.get_microprogram_memory(),
                         'microprogram' : assembly_microprogram})
     except Exception as e:
         app.logger.error(f'Error microexecuting: {e}')
@@ -135,11 +135,11 @@ def execute():
     try:
         processor.execute()
         app.logger.info('Executed successfully')
-        return jsonify({'control message' : processor.get_execute_control_message(),
+        return jsonify({'control_message' : processor.get_execute_control_message(),
                         'registers' : processor.get_registers(),
-                        'main memory' : processor.get_memory(),
+                        'main_memory' : processor.get_memory(),
                         'program' : assembly_program,
-                        'microprogram memory' : processor.get_microprogram_memory(),
+                        'microprogram_memory' : processor.get_microprogram_memory(),
                         'microprogram' : assembly_microprogram})
     except Exception as e:
         app.logger.error(f'Error executing: {e}')
@@ -152,11 +152,11 @@ def run():
     try:
         processor.run()
         app.logger.info('Program run successfully')
-        return jsonify({'control message' : processor.get_run_control_message(),
+        return jsonify({'control_message' : processor.get_run_control_message(),
                         'registers' : processor.get_registers(),
-                        'main memory' : processor.get_memory(),
+                        'main_memory' : processor.get_memory(),
                         'program' : assembly_program,
-                        'microprogram memory' : processor.get_microprogram_memory(),
+                        'microprogram_memory' : processor.get_microprogram_memory(),
                         'microprogram' : assembly_microprogram})
     except Exception as e:
         app.logger.error(f'Error running program: {e}')
