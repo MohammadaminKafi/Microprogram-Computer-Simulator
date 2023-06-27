@@ -27,6 +27,12 @@ class Assembler:
                 # check if label is already in first pass table
                 if line[0][:-1] in self.first_pass_table:
                     raise Exception(f'Label of line {str(l)} is already defined in memory location {self.first_pass_table[line[0][:-1]]}: {line[0][:-1]}')
+                # check if label is out of range
+                if lc > 2047:
+                    raise Exception(f'Label of line {str(l)} is out of memory range: {line[0][:-1]}')
+                # check if location of label is already defined
+                if lc in self.first_pass_table.values():
+                    raise Exception(f'Location of label of line {str(l)} is already reserved in memory location by label {list(self.first_pass_table.keys())[list(self.first_pass_table.values()).index(lc)]}: {line[0][:-1]}') 
                 # add label to first pass table together with the line number
                 self.first_pass_table[line[0][:-1]] = lc
                 lc += 1
@@ -43,7 +49,7 @@ class Assembler:
                 # if line is not ORG or END, increment line counter
                 else:
                     lc += 1
-                    l += 1
+                l += 1
 
     # function for assembler second pass to extract second pass table
     def second_pass(self) -> None:
@@ -188,7 +194,13 @@ class MicroAssembler:
             if line[0][-1] == ':':
                 # check if label is already in first pass table
                 if line[0][:-1] in self.first_pass_table:
-                    raise Exception(f'Label of line {str(l)} is already defined in memory location {self.first_pass_table[line[0][:-1]]}: {line[0][:-1]}')
+                    raise Exception(f'Label of line {str(l)} is already defined in microprogram memory location {self.first_pass_table[line[0][:-1]]}: {line[0][:-1]}')
+                # check if the location is not out of range
+                if lc > 127:
+                    raise Exception(f'Label of line {str(l)} is out of microprogram memory range: {line[0][:-1]}')
+                # check if location is not already reserved
+                if lc in self.first_pass_table.values():
+                    raise Exception(f'Label of line {str(l)} is already reserved in microprogram memory location by label {list(self.first_pass_table.keys())[list(self.first_pass_table.values()).index(lc)]}: {line[0][:-1]}')
                 # add label to first pass table together with the value of line counter
                 self.first_pass_table[line[0][:-1]] = lc
                 lc += 1
@@ -205,7 +217,7 @@ class MicroAssembler:
                 # if line is not ORG or END, increment line counter
                 else:
                     lc += 1
-                    l += 1
+                l += 1
 
     # function for assembler second pass to convert assembly code to machine code
     def second_pass(self) -> None:
