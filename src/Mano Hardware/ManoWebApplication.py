@@ -21,14 +21,19 @@ def hello():
 def POST_programs():
     main_program = request.json['main_program']
     microprogram = request.json['microprogram']
-    return f"You entered Program: {main_program} and Microprogram: {microprogram}"
+    # write the programs into the files
+    with open('main_code.txt', 'w') as f:
+        f.write(main)
+    with open('main_microprogram_code.txt', 'w') as f:
+        f.write(microprogram)
+    #return f"You entered Program: {main_program} and Microprogram: {microprogram}"
 
 # extracting code
-assembly_program = open('assembly_program.txt', 'r').read().split('\n')
+assembly_program = open('main_code.txt', 'r').read().split('\n')
 for i in range(len(assembly_program)):
     assembly_program[i] = assembly_program[i].split()
 
-assembly_microprogram = open('assembly_microprogram.txt', 'r').read().split('\n')
+assembly_microprogram = open('main_microprogram_code.txt', 'r').read().split('\n')
 for i in range(len(assembly_microprogram)):
     assembly_microprogram[i] = assembly_microprogram[i].split()
  
