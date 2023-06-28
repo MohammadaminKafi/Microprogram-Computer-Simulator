@@ -20,6 +20,8 @@ microassembler.assemble()
 assembler = Assembler(assembly_program, microassembler.get_first_pass_table())
 assembler.assemble()
 
+print("Programs assembled successfully")
+
 for item in assembler.second_pass_table.keys():
     print(item, assembler.second_pass_table[item])
 for item in assembler.first_pass_table.keys():
@@ -29,6 +31,8 @@ for item in microassembler.second_pass_table.keys():
 for item in microassembler.first_pass_table.keys():
     print(item, microassembler.first_pass_table[item])
 
+pritn("-------------------------------------------------------------------")
+
 # initializing processor
 processor = CPU(assembler.start_of_program, microassembler.start_of_microprogram)
 
@@ -37,14 +41,16 @@ programmer = programmer(processor, assembler.get_second_pass_table(), microassem
 programmer.load_program()
 programmer.load_microprogram()
 
-# for i in range(90, 110):
-#     print(i, int(processor.main_memory.depository[i].read()[2:], 2))
+print("Programs loaded successfully")
+print("-------------------------------------------------------------------")
 
-# running program
-# for i in range(30):
-#     processor.microexecute()
-
-# for i in range(1):
-#     processor.execute()
-
-processor.run()
+while True:
+    print("Enter 1 to run one microinstruction, 2 to run one instruction, 3 ro run till halt")
+    choice = int(input())
+    if choice == 1:
+        processor.microexecute()
+    elif choice == 2:
+        processor.execute()
+    elif choice == 3:
+        processor.run()
+        break
