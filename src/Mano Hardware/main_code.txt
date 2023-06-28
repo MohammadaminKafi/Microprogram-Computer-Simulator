@@ -1,14 +1,16 @@
-# use this format to comment, comments at the end of the line is not allowed
-# start of program would be from MAIN, else from location 100 of memory
 
-# use this format for writting code:
-# LABEL,         INSTRUCTION      ADDRESS
-# VARIABLE,      (DEC, HEX, BIN)  VALUE
-
-ORG 100
-MAIN,   FACT    NUM
-        STRAC   SUM
-        HALT
-SUM,    DEC 0
-NUM,    DEC 8
-END
+                        # use this format to comment, comments at the end of the line is not allowed
+                        # start of program would be from MAIN, else from location 100 of memory
+                        
+                        # use this format for writting code:
+                        # LABEL,         INSTRUCTION      ADDRESS
+                        # VARIABLE,      (DEC, HEX, BIN)  VALUE
+                        
+                        ORG 100
+                        MAIN,   FACT    NUM
+                                STRAC   SUM
+                                HALT
+                        SUM,    DEC 0
+                        NUM,    DEC 8
+                        END
+                        
