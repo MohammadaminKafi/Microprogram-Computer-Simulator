@@ -36,6 +36,15 @@ def stringify_file(filename):
     except Exception as e:
         print(f'Error stringifying file: {e}')
         return False
+# function to make list
+def listify(filename):
+    return open(filename, 'r').read().split('\n')
+# function to change keys and values of a dictioanry and makes it in order
+def change_keys_values(dictionary):
+    new_dictionary = {}
+    for key in dictionary.keys():
+        new_dictionary[dictionary[key]] = key
+    return new_dictionary
 
 # API for testing
 @app.route("/")
@@ -88,7 +97,7 @@ def microassembler_assemble():
     try:
         microassembler.assemble()
         app.logger.info('Microprogram assembled successfully')
-        return jsonify({'control_message' : 'microprogram assembled succesfully', 'second_pass_table' : microassembler.get_second_pass_table(), 'first_pass_table' : microassembler.get_first_pass_table()})
+        return jsonify({'control_message' : 'microprogram assembled succesfully', 'second_pass_table' : change_keys_values(microassembler.get_second_pass_table()), 'first_pass_table' : change_keys_values(microassembler.get_first_pass_table())})
     except Exception as e:
         app.logger.error(f'Error assembling microprogram: {e}')
         return jsonify({'error' : str(e)})
@@ -101,7 +110,7 @@ def assembler_assemble():
     try:
         assembler.assemble()
         app.logger.info('Program assembled successfully')
-        return jsonify({'control_message' : 'program assembled succesfully', 'second_pass_table' : assembler.get_second_pass_table(), 'first_pass_table' : assembler.get_first_pass_table()})
+        return jsonify({'control_message' : 'program assembled succesfully', 'second_pass_table' : change_keys_values(assembler.get_second_pass_table()), 'first_pass_table' : change_keys_values(assembler.get_first_pass_table())})
     except Exception as e:
         app.logger.error(f'Error assembling program: {e}')
         return jsonify({'error' : str(e)})
@@ -129,9 +138,9 @@ def load():
         return jsonify({'control_message' : 'programs loaded succesfully',
                         'registers' : processor.get_registers(),
                         'main_memory' : processor.get_memory(),
-                        'program' : assembly_program,
+                        'program' : listify('main_code.txt'),
                         'microprogram_memory' : processor.get_microprogram_memory(),
-                        'microprogram' : assembly_microprogram})
+                        'microprogram' : listify('main_microprogram_code.txt')})
     except Exception as e:
         app.logger.error(f'Error loading programs: {e}')
         return jsonify({'error' : str(e)})
@@ -146,9 +155,9 @@ def microexecute():
         return jsonify({'control_message' : processor.get_microexecute_control_message(),
                         'registers' : processor.get_registers(),
                         'main_memory' : processor.get_memory(),
-                        'program' : assembly_program,
+                        'program' : listify('main_code.txt'),
                         'microprogram_memory' : processor.get_microprogram_memory(),
-                        'microprogram' : assembly_microprogram})
+                        'microprogram' : listify('main_microprogram_code.txt')})
     except Exception as e:
         app.logger.error(f'Error microexecuting: {e}')
         return jsonify({'error' : str(e)})
@@ -160,12 +169,12 @@ def execute():
     try:
         processor.execute()
         app.logger.info('Executed successfully')
-        return jsonify({'control_message' : processor.get_execute_control_message(),
+        return jsonify({'control_message' : 'Instruction executed successfully',
                         'registers' : processor.get_registers(),
                         'main_memory' : processor.get_memory(),
-                        'program' : assembly_program,
+                        'program' : listify('main_code.txt'),
                         'microprogram_memory' : processor.get_microprogram_memory(),
-                        'microprogram' : assembly_microprogram})
+                        'microprogram' : listify('main_microprogram_code.txt')})
     except Exception as e:
         app.logger.error(f'Error executing: {e}')
         return jsonify({'error' : str(e)})
@@ -177,12 +186,12 @@ def run():
     try:
         processor.run()
         app.logger.info('Program run successfully')
-        return jsonify({'control_message' : processor.get_run_control_message(),
+        return jsonify({'control_message' : 'Program run successfully',
                         'registers' : processor.get_registers(),
                         'main_memory' : processor.get_memory(),
-                        'program' : assembly_program,
+                        'program' : listify('main_code.txt'),
                         'microprogram_memory' : processor.get_microprogram_memory(),
-                        'microprogram' : assembly_microprogram})
+                        'microprogram' : listify('main_microprogram_code.txt')})
     except Exception as e:
         app.logger.error(f'Error running program: {e}')
         return jsonify({'error' : str(e)})
