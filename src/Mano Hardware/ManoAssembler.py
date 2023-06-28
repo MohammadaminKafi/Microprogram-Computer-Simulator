@@ -280,14 +280,26 @@ class MicroAssembler:
                             field1 = self.F1[line[1][0]]
                             field2 = self.F2[line[1][1]]
                             field3 = '000'
+                        elif line[1][0] in self.F2 and line[1][1] in self.F1:
+                            field1 = self.F1[line[1][1]]
+                            field2 = self.F2[line[1][0]]
+                            field3 = '000'
                         elif line[1][0] in self.F1 and line[1][1] in self.F3:
                             field1 = self.F1[line[1][0]]
                             field2 = '000'
                             field3 = self.F3[line[1][1]]
+                        elif line[1][0] in self.F3 and line[1][1] in self.F1:
+                            field1 = self.F1[line[1][1]]
+                            field2 = '000'
+                            field3 = self.F3[line[1][0]]
                         elif line[1][0] in self.F2 and line[1][1] in self.F3:
                             field1 = '000'
                             field2 = self.F2[line[1][0]]
                             field3 = self.F3[line[1][1]]
+                        elif line[1][0] in self.F3 and line[1][1] in self.F2:
+                            field1 = '000'
+                            field2 = self.F2[line[1][1]]
+                            field3 = self.F3[line[1][0]]
                         else:
                             raise Exception('Invalid function field near line ' + str(l) + ': ' + line[1][0] + ',' + line[1][1])
                     elif len(line[1]) == 3:
@@ -295,6 +307,26 @@ class MicroAssembler:
                             field1 = self.F1[line[1][0]]
                             field2 = self.F2[line[1][1]]
                             field3 = self.F3[line[1][2]]
+                        elif line[1][0] in self.F1 and line[1][1] in self.F3 and line[1][2] in self.F2:
+                            field1 = self.F1[line[1][0]]
+                            field2 = self.F2[line[1][2]]
+                            field3 = self.F3[line[1][1]]
+                        elif line[1][0] in self.F2 and line[1][1] in self.F1 and line[1][2] in self.F3:
+                            field1 = self.F1[line[1][1]]
+                            field2 = self.F2[line[1][0]]
+                            field3 = self.F3[line[1][2]]
+                        elif line[1][0] in self.F2 and line[1][1] in self.F3 and line[1][2] in self.F1:
+                            field1 = self.F1[line[1][2]]
+                            field2 = self.F2[line[1][0]]
+                            field3 = self.F3[line[1][1]]
+                        elif line[1][0] in self.F3 and line[1][1] in self.F1 and line[1][2] in self.F2:
+                            field1 = self.F1[line[1][1]]
+                            field2 = self.F2[line[1][2]]
+                            field3 = self.F3[line[1][0]]
+                        elif line[1][0] in self.F3 and line[1][1] in self.F2 and line[1][2] in self.F1:
+                            field1 = self.F1[line[1][2]]
+                            field2 = self.F2[line[1][1]]
+                            field3 = self.F3[line[1][0]]
                         else:
                             raise Exception('Invalid function field near line ' + str(l) + ': ' + line[1][0] + ',' + line[1][1] + ',' + line[1][2])
                     # checking condition field
@@ -340,18 +372,30 @@ class MicroAssembler:
                     else:
                         raise Exception('Invalid function field near line ' + str(l) + ': ' + line[0][0])
                 elif len(line[0]) == 2:
-                    if line[0][0] in self.F1 and line[0][1] in self.F2:
+                    if line[1][0] in self.F1 and line[1][1] in self.F2:
                         field1 = self.F1[line[0][0]]
                         field2 = self.F2[line[0][1]]
                         field3 = '000'
-                    elif line[0][0] in self.F1 and line[0][1] in self.F3:
+                    elif line[1][0] in self.F2 and line[1][1] in self.F1:
+                        field1 = self.F1[line[0][1]]
+                        field2 = self.F2[line[0][0]]
+                        field3 = '000'
+                    elif line[1][0] in self.F1 and line[1][1] in self.F3:
                         field1 = self.F1[line[0][0]]
                         field2 = '000'
                         field3 = self.F3[line[0][1]]
-                    elif line[0][0] in self.F2 and line[0][1] in self.F3:
+                    elif line[1][0] in self.F3 and line[1][1] in self.F1:
+                        field1 = self.F1[line[0][1]]
+                        field2 = '000'
+                        field3 = self.F3[line[0][0]]
+                    elif line[1][0] in self.F2 and line[1][1] in self.F3:
                         field1 = '000'
                         field2 = self.F2[line[0][0]]
                         field3 = self.F3[line[0][1]]
+                    elif line[1][0] in self.F3 and line[1][1] in self.F2:
+                        field1 = '000'
+                        field2 = self.F2[line[0][1]]
+                        field3 = self.F3[line[0][0]]
                     else:
                         raise Exception('Invalid function field near line ' + str(l) + ': ' + line[0][0])
                 elif len(line[0]) == 3:
@@ -359,6 +403,26 @@ class MicroAssembler:
                         field1 = self.F1[line[0][0]]
                         field2 = self.F2[line[0][1]]
                         field3 = self.F3[line[0][2]]
+                    elif line[0][0] in self.F1 and line[0][1] in self.F3 and line[0][2] in self.F2:
+                        field1 = self.F1[line[0][0]]
+                        field2 = self.F2[line[0][2]]
+                        field3 = self.F3[line[0][1]]
+                    elif line[0][0] in self.F2 and line[0][1] in self.F1 and line[0][2] in self.F3:
+                        field1 = self.F1[line[0][1]]
+                        field2 = self.F2[line[0][0]]
+                        field3 = self.F3[line[0][2]]
+                    elif line[0][0] in self.F2 and line[0][1] in self.F3 and line[0][2] in self.F1:
+                        field1 = self.F1[line[0][2]]
+                        field2 = self.F2[line[0][0]]
+                        field3 = self.F3[line[0][1]]
+                    elif line[0][0] in self.F3 and line[0][1] in self.F1 and line[0][2] in self.F2:
+                        field1 = self.F1[line[0][1]]
+                        field2 = self.F2[line[0][2]]
+                        field3 = self.F3[line[0][0]]
+                    elif line[0][0] in self.F3 and line[0][1] in self.F2 and line[0][2] in self.F1:
+                        field1 = self.F1[line[0][2]]
+                        field2 = self.F2[line[0][1]]
+                        field3 = self.F3[line[0][0]]
                     else:
                         raise Exception('Invalid function field near line ' + str(l) + ': ' + line[0][0])
                 # checking condition field
