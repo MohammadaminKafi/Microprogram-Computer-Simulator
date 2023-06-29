@@ -31,7 +31,7 @@ for item in microassembler.second_pass_table.keys():
 for item in microassembler.first_pass_table.keys():
     print(item, microassembler.first_pass_table[item])
 
-pritn("-------------------------------------------------------------------")
+print("-------------------------------------------------------------------")
 
 # initializing processor
 processor = CPU(assembler.start_of_program, microassembler.start_of_microprogram)

@@ -31,11 +31,10 @@ export default function SecPage(){
     }
 
     function fetchData(){
-
         fetch(url+'microassemble')
         .then(response => {
-            return response.json()}
-        )
+            return response.json()
+        })
         .then(data => {
             console.log(data)
             if(microProgram == null){
@@ -46,24 +45,25 @@ export default function SecPage(){
                 setError(true);
                 setErrorMsg(data);
             }
-            
         })
 
-        fetch(url+'assemble')
-        .then(response => {
-            return response.json()}
-        )   
-        .then(data => {
-            console.log(data)
-            if(program == null){
-                setProgram(data);
-            }
-            const obj = Object.keys(data);
-            if (obj.length == 1 ){
-                setError(true);
-                setErrorMsg(data);
-            }
-        })
+        setTimeout(() => {
+            fetch(url+'assemble')
+            .then(response => {
+                return response.json()
+            })   
+            .then(data => {
+                console.log(data)
+                if(program == null){
+                    setProgram(data);
+                }
+                const obj = Object.keys(data);
+                if (obj.length == 1 ){
+                    setError(true);
+                    setErrorMsg(data);
+                }
+            })
+        }, 1000);
     }
 
     return(

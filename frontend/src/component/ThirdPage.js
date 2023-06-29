@@ -15,6 +15,53 @@ export default function ThirdPage(){
         firstfetchData();
     },[])
 
+    useEffect(()=>{
+
+        if (run == null){
+            return;
+        }
+    function table1(){
+        const table = document.getElementById('myTable');
+
+        const rows = Array.from(table.getElementsByTagName('tr')).slice(1);
+    
+        rows.sort((a, b) => {
+        const aValue = a.cells[0].textContent;
+        const bValue = b.cells[0].textContent;
+        return aValue.localeCompare(bValue);
+        });
+    
+        table.tBodies[0].innerHTML = '';
+    
+        rows.forEach(row => {
+        table.tBodies[0].appendChild(row);
+        });
+    }
+
+    function table2(){
+        const table = document.getElementById('myTable2');
+
+        const rows = Array.from(table.getElementsByTagName('tr')).slice(1);
+    
+        rows.sort((a, b) => {
+        const aValue = a.cells[0].textContent;
+        const bValue = b.cells[0].textContent;
+        return aValue.localeCompare(bValue);
+        });
+    
+        table.tBodies[0].innerHTML = '';
+    
+        rows.forEach(row => {
+        table.tBodies[0].appendChild(row);
+        });
+    }
+
+    table1();
+    table2();
+    
+
+    },[run,binary])
+
     function binaryHandler(){
         setBinary(!binary);
     }
@@ -129,7 +176,7 @@ export default function ThirdPage(){
                         <div className="program-container">
                             <label>your programs:</label>
                             <div className="table-container">
-                                <table>
+                                <table id="myTable">
                                     <thead>
                                         <tr>
                                             <th>Line</th>
@@ -159,7 +206,7 @@ export default function ThirdPage(){
                         <div className="microprogram-container">
                             <label>your microprograms:</label>
                             <div className="table-container">
-                                <table>
+                                <table id="myTable2">
                                     <thead>
                                         <tr>
                                             <th>Line</th>
@@ -245,7 +292,7 @@ export default function ThirdPage(){
                         </thead>
                         <tbody>
                             <tr>
-                                <th>{run.registers.AC[0]}</th>
+                                <th>{run.registers.DR[0]}</th>
                                 <th>{ run.registers.AR[0]}</th>
                                 <th>{ run.registers.SBR[0]}</th>
                             </tr>
@@ -279,7 +326,7 @@ export default function ThirdPage(){
                         </thead>
                         <tbody>
                             <tr>
-                                <th>{run.registers.AC[1]}</th>
+                                <th>{run.registers.DR[1]}</th>
                                 <th>{ run.registers.AR[1]}</th>
                                 <th>{ run.registers.SBR[1]}</th>
                             </tr>

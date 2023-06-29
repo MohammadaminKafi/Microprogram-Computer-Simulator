@@ -116,7 +116,7 @@ def assembler_assemble():
         return jsonify({'error' : str(e)})
 
 # initializing processor
-processor = CPU(assembler.start_of_program, microassembler.start_of_microprogram)
+processor = CPU('0b' + bin(100)[2:].zfill(11), microassembler.start_of_microprogram)
 # API for initializing the processor, just a quick show of processor status, not necessary
 @app.route("/initialize")
 def initialize():

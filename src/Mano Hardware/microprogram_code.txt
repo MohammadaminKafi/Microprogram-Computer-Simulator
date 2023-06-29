@@ -1,5 +1,5 @@
 
-                        "# use this format to comment, comments at the end of the line is not allowed
+                        # use this format to comment, comments at the end of the line is not allowed
                         # start of control would be from FETCH, else from location 64 of microprogram memory
                         
                         # use this format for writting code:

@@ -74,7 +74,15 @@ class Assembler:
                 break
             elif line[0][-1] == ',':
                 if line[1] == 'DEC':
-                    self.second_pass_table[self.first_pass_table[line[0][:-1]]] = bin(int(line[2]))[2:].zfill(16)
+                    # handleing negative numbers
+                    if line[2][0] == '-':
+                        result = bin(int(line[2]))[3:].zfill(16)
+                        # 2's complement
+                        result = ''.join(['1' if x == '0' else '0' for x in result])
+                        result = bin(int(result, 2) + 1)[2:].zfill(16)
+                        self.second_pass_table[self.first_pass_table[line[0][:-1]]] = result
+                    else:
+                        self.second_pass_table[self.first_pass_table[line[0][:-1]]] = bin(int(line[2]))[2:].zfill(16)
                 elif line[1] == 'HEX':
                     self.second_pass_table[self.first_pass_table[line[0][:-1]]] = bin(int(line[2], 16))[2:].zfill(16)
                 elif line[1] == 'BIN':
